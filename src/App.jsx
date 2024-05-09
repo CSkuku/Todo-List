@@ -5,26 +5,27 @@ import { useEffect } from "react";
 function App() {
   const [task, setTask] = useState("");
 
-  //why we put functions declarations in App component. cant we do it in edittodo. is there any standard so that I can learn.
   const [todos, setTodos] = useState(
     JSON.parse(localStorage.getItem("myTodoList")) || []
   );
 
-  /* const stringTodos = JSON.stringify(todos);
-  localStorage.setItem("myTodoList", stringTodos); */
-
-  /* console.log(JSON.parse(localStorage.getItem("myTodoList"))); */
   useEffect(() => {
     const stringTodos = JSON.stringify(todos);
-    // const unstringedTodos = JSON.parse(stringTodos);
+
     localStorage.setItem("myTodoList", stringTodos);
-    // const l = localStorage.getItem("myTodoList");
 
     console.log(JSON.parse(localStorage.getItem("myTodoList")));
   }, [todos]);
 
   const addTodo = (task) => {
-    setTodos([...todos, { task: task, id: todos.length + 1, editing: false }]);
+    if (task === "") {
+      return;
+    } else {
+      setTodos([
+        ...todos,
+        { task: task, id: todos.length + 1, editing: false },
+      ]);
+    }
 
     setTask("");
   };
@@ -81,6 +82,7 @@ function App() {
               type="text"
               value={task}
               className="todo"
+              maxLength="30"
               placeholder="What is Your Task?"
               onChange={(e) => setTask(e.target.value)}
             />
